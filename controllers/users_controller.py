@@ -4,25 +4,23 @@ from db import db
 from models.users import Users, user_schema, users_schema
 from models.products import Products
 from util.reflection import populate_object
-from lib.authenticate import authenticate
-
-# @authenticate_return_auth
+from lib.authenticate import authenticate, authenticate_return_auth
 
 
-def user_add(req):
-    # def user_add(req, auth_info):
+@authenticate_return_auth
+def user_add(req, auth_info):
     post_data = req.form if req.form else req.json
 
-    # if auth_info.user.role =='super-admin':
-    new_user = Users.get_new_user()
-    populate_object(new_user, post_data)
+    if auth_info.user.role == 'admin':
+        new_user = Users.get_new_user()
+        populate_object(new_user, post_data)
 
-    db.session.add(new_user)
-    db.session.commit()
+        db.session.add(new_user)
+        db.session.commit()
 
-    return jsonify(user_schema.dump(new_user)), 201
-# else:
-#     return jsonify("your role isn't cool enough")
+        return jsonify(user_schema.dump(new_user)), 201
+    else:
+        return jsonify('unauthorized'), 401
 
 
 @authenticate
@@ -32,10 +30,35 @@ def users_get_all(req):
     return jsonify(users_schema.dump(users_query)), 200
 
 
+@authenticate_return_auth
+def user_delete_by_id(req, user_id, auth_info):
+    # post_data = req.form if req.form else req.json
+    user_query = db.session.query(Users).filter(Users.user_id == user_id).first()
+
+    if auth_info.user.role == 'admin':
+        if user_query:
+            try:
+
+                db.sesion.delete(user_query)
+                db.session.commit()
+
+            except:
+
+                db.session.rollback()
+
+            return jsonify('ERROR: unable to delete record'), 400
+
+        return jsonify('record successfully deleted.'), 200
+
+    else:
+        return jsonify('unauthorized'), 401
+
+
+@authenticate
 def user_add_product(req):
     post_data = req.form if req.form else req.json
-    user_id = post_data.get("user_id")
-    product_id = post_data.get("product_id")
+    user_id = post_data.get('user_id')
+    product_id = post_data.get('product_id')
 
     user_query = db.session.query(Users).filter(Users.user_id == user_id).first()
     product_query = db.session.query(Products).filter(Products.product_id == product_id).first()
@@ -44,6 +67,6 @@ def user_add_product(req):
         user_query.products.append(product_query)
         db.session.commit()
 
-        return jsonify({"message": "product added to user", "user": user_schema.dump(user_query)}), 201
+        return jsonify({'message': 'product added to user', 'user': user_schema.dump(user_query)}), 201
     else:
-        return jsonify("not found"), 404
+        return jsonify('not found'), 404

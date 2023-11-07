@@ -24,7 +24,7 @@ def add_user_demo_data():
             else:
                 role = "user"
 
-            # new_password = generate_password_hash(password).decode("utf8")
+            new_password = generate_password_hash(password).decode("utf8")
 
             new_user = Users(first_name, last_name, email, password, role)
 

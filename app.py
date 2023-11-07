@@ -33,4 +33,5 @@ register_blueprints(app)
 
 if __name__ == "__main__":
     create_all()
+    create_tables()
     app.run(host="0.0.0.0", port="8086", debug=True)
