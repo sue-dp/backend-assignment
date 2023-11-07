@@ -10,8 +10,9 @@ def add_product_demo_data():
 
         if new_product == None:
             product_name = product
+            active = True
 
-            new_product = Products(product_name)
+            new_product = Products(product_name, active)
 
             db.session.add(new_product)
 
