@@ -17,7 +17,7 @@ def add_user_demo_data():
             first_name = first_name
             last_name = last_name
             email = f"{first_name.lower()}{last_name.lower()}@expendables.com"
-            password = 1234
+            password = '1234'
 
             if first_name == 'Barney':
                 role = "admin"
@@ -26,7 +26,7 @@ def add_user_demo_data():
 
             new_password = generate_password_hash(password).decode("utf8")
 
-            new_user = Users(first_name, last_name, email, password, role)
+            new_user = Users(first_name=first_name, last_name=last_name, email=email, password=new_password, role=role)
 
             db.session.add(new_user)
 

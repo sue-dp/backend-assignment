@@ -18,20 +18,26 @@ def validate_uuid4(uuid_string):
 
 
 def validate_token(arg_zero):
-    auth_token = arg_zero.headers['auth']
+    auth_token = arg_zero.headers['auth_token']
 
     if not auth_token or not validate_uuid4(auth_token):
 
         return False
 
-    auth_record = db.session.query(AuthTokens).filter(AuthTokens.auth_token == auth_token).first()
+    try:
+        auth_record = db.session.query(AuthTokens).filter(AuthTokens.auth_token == auth_token).filter(AuthTokens.expiration > datetime.utcnow()).first()
 
-    if auth_record:
-        if auth_record.expiration > datetime.utcnow():
-            return auth_record
+        return auth_record
 
-        else:
-            return False
+    except:
+        return False
+
+    # if auth_record:
+    #     if auth_record.expiration > datetime.utcnow():
+    #         return auth_record
+
+    #     else:
+    #         return False
 
 
 def fail_response():

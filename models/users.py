@@ -28,12 +28,12 @@ class Users(db.Model):
         self.active = active
 
     def get_new_user():
-        return Users("", "", "user", True)
+        return Users("", "", "", "", "user", True)
 
 
 class UsersSchema(ma.Schema):
     class Meta:
-        fields = ['user_id', 'email', 'role', 'active', 'products']
+        fields = ['user_id', 'first_name', 'last_name', 'email', 'role', 'active', 'products']
 
     products = ma.fields.Nested("ProductsSchema", many=True, exclude=["users"])
 

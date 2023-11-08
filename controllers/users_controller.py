@@ -23,16 +23,32 @@ def user_add(req, auth_info):
         return jsonify('unauthorized'), 401
 
 
-@authenticate
-def users_get_all(req):
+@authenticate_return_auth
+def users_get_all(req, auth_info):
     users_query = db.session.query(Users).all()
 
-    return jsonify(users_schema.dump(users_query)), 200
+    if auth_info.user.role == 'admin':
+        return jsonify({'message': 'users found', 'users': users_schema.dump(users_query)}), 200
+    else:
+        return jsonify({'message': 'unauthorized'}), 401
+
+
+@authenticate_return_auth
+def user_get_by_id(req, user_id, auth_info):
+    user_query = db.session.query(Users).filter(Users.user_id == user_id).first()
+
+    if user_query:
+        if auth_info.user.role == 'admin' or user_id == auth_info.user.user_id:
+            return jsonify({'message': 'user found', 'user': user_schema.dump(user_query)}), 200
+
+        else:
+            return jsonify({'message': 'unauthorized'}), 401
+    else:
+        return jsonify({'message': 'user not found'}), 404
 
 
 @authenticate_return_auth
 def user_delete_by_id(req, user_id, auth_info):
-    # post_data = req.form if req.form else req.json
     user_query = db.session.query(Users).filter(Users.user_id == user_id).first()
 
     if auth_info.user.role == 'admin':
@@ -54,6 +70,27 @@ def user_delete_by_id(req, user_id, auth_info):
         return jsonify('unauthorized'), 401
 
 
+@authenticate_return_auth
+def user_update(req, user_id, auth_info):
+    post_data = req.form if req.form else req.json
+
+    user_query = db.session.query(Users).filter(Users.user_id == user_id).first()
+
+    if user_query:
+        if auth_info.user.role == 'admin' or user_id == auth_info.user.user_id:
+            populate_object(user_query, post_data)
+
+            db.session.commit()
+
+            return jsonify({'message': 'user updated', 'user': user_schema.dump(user_query)}), 200
+
+        else:
+            return jsonify({'message': 'unauthorized'}), 401
+
+    else:
+        return jsonify({'message': 'user not found'}), 404
+
+
 @authenticate
 def user_add_product(req):
     post_data = req.form if req.form else req.json
@@ -68,5 +105,6 @@ def user_add_product(req):
         db.session.commit()
 
         return jsonify({'message': 'product added to user', 'user': user_schema.dump(user_query)}), 201
+
     else:
         return jsonify('not found'), 404

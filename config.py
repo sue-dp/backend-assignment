@@ -1,4 +1,4 @@
-users = ["Barny Ross", "Lee Christmas", "Hale Caesar", "Gunner Jensen", "Yin Yang", "Toll Road"]
+users = ["Barney Ross", "Lee Christmas", "Hale Caesar", "Gunner Jensen", "Yin Yang", "Toll Road"]
 
 products = [
     "Firearms",

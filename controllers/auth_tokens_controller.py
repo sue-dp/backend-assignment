@@ -47,4 +47,4 @@ def auth_token_add(req):
     db.session.add(new_token)
     db.session.commit()
 
-    return jsonify({"auth_token": auth_token_schema.dump(new_token)}), 201
+    return jsonify({'message': 'success', "auth_info": auth_token_schema.dump(new_token)}), 201

@@ -24,9 +24,9 @@ init_db(app, db)
 
 def create_tables():
     with app.app_context():
-        print("Creating tables...")
+        print("creating tables...")
         db.create_all()
-        print("Tables created successfully.")
+        print("tables created successfully.")
 
 
 register_blueprints(app)
