@@ -26,6 +26,7 @@ def user_add(req, auth_info):
 @authenticate_return_auth
 def users_get_all(req, auth_info):
     users_query = db.session.query(Users).all()
+    print(auth_info.user.role)
 
     if auth_info.user.role == 'admin':
         return jsonify({'message': 'users found', 'users': users_schema.dump(users_query)}), 200
@@ -62,12 +63,12 @@ def user_delete_by_id(req, user_id, auth_info):
 
                 db.session.rollback()
 
-            return jsonify('ERROR: unable to delete record'), 400
+            return jsonify({'message': 'unable to delete record'}), 400
 
-        return jsonify('record successfully deleted.'), 200
+        return jsonify({'message': 'record successfully deleted'}), 200
 
     else:
-        return jsonify('unauthorized'), 401
+        return jsonify({'message': 'unauthorized'}), 401
 
 
 @authenticate_return_auth
@@ -107,4 +108,23 @@ def user_add_product(req):
         return jsonify({'message': 'product added to user', 'user': user_schema.dump(user_query)}), 201
 
     else:
-        return jsonify('not found'), 404
+        return jsonify({'message': 'not found'}), 404
+
+
+@authenticate_return_auth
+def user_activity(req, user_id, auth_info):
+    user_query = db.session.query(Users).filter(Users.user_id == user_id).first()
+
+    if user_query:
+        if auth_info.user.role == 'admin':
+            user_query.active = not user_query.active
+
+            db.session.commit()
+
+            return jsonify({'message': 'user activity has been updated', 'user': user_schema.dump(user_query)}), 200
+
+        else:
+            return jsonify({'message': 'unauthorized'}), 401
+
+    else:
+        return jsonify({'message': 'user not found'}), 404

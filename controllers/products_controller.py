@@ -19,7 +19,7 @@ def product_add(req):
     return jsonify(product_schema.dump(new_product)), 201
 
 
-def products_get_all():
+def products_get_all(req):
     products_query = db.session.query(Products).all()
 
     return jsonify(products_schema.dump(products_query)), 200

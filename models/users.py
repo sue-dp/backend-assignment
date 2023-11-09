@@ -18,6 +18,7 @@ class Users(db.Model):
     active = db.Column(db.Boolean(), default=True, nullable=False)
 
     products = db.relationship("Products", secondary=users_products_xref, back_populates="users")
+    auth = db.relationship("AuthTokens", back_populates='user')
 
     def __init__(self, first_name, last_name, email, password, role="user", active=True):
         self.first_name = first_name

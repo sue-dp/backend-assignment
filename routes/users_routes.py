@@ -21,7 +21,7 @@ def user_get_by_id(user_id):
     return controllers.user_get_by_id(request, user_id)
 
 
-@users.route('/user/<user_id>', methods=['DELETE'])
+@users.route('/user/delete/<user_id>', methods=['DELETE'])
 def user_delete_by_id(user_id):
     return controllers.user_delete_by_id(request, user_id)
 
@@ -34,3 +34,8 @@ def user_update(user_id):
 @users.route("/user/product-add", methods=["POST"])
 def user_add_product():
     return controllers.user_add_product(request)
+
+
+@users.route('/user/activity/<user_id>', methods=['PATCH'])
+def user_activity(user_id):
+    return controllers.user_activity(request, user_id)

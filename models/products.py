@@ -3,7 +3,8 @@ from sqlalchemy.dialects.postgresql import UUID
 import marshmallow as ma
 
 from db import db
-from models.users_products_xref import users_products_xref
+from .users_products_xref import users_products_xref
+from .products_categories_xref import products_categories_xref
 
 
 class Products(db.Model):
@@ -14,6 +15,7 @@ class Products(db.Model):
     active = db.Column(db.Boolean(), default=True)
 
     users = db.relationship("Users", secondary=users_products_xref, back_populates="products")
+    categories = db.relationship("Categories", secondary=products_categories_xref, back_populates="products")
 
     def __init__(self, product_name, active):
         self.product_name = product_name
@@ -25,9 +27,10 @@ class Products(db.Model):
 
 class ProductsSchema(ma.Schema):
     class Meta:
-        fields = ['product_id', 'product_name', 'users', 'active']
+        fields = ['product_id', 'product_name', 'users', 'categories', 'active']
 
     users = ma.fields.Nested("UsersSchema", many=True, exclude=["products"])
+    categories = ma.fields.Nested("CategoriesSchema", many=True, exclud=['products'])
 
 
 product_schema = ProductsSchema()
