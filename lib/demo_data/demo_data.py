@@ -4,6 +4,7 @@ from db import db
 from models.users import Users
 from lib.demo_data.user_demo_data import add_user_demo_data
 from lib.demo_data.products_demo_data import add_product_demo_data
+from lib.demo_data.categories_demo_data import add_category_demo_data
 
 
 def run_demo_data():
@@ -14,5 +15,6 @@ def run_demo_data():
             print('Creating demo data...')
             add_user_demo_data()
             add_product_demo_data()
+            add_category_demo_data()
         else:
             print('Demo data found.')

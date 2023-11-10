@@ -32,13 +32,6 @@ def validate_token(args):
     except:
         return False
 
-    # if auth_record:
-    #     if auth_record.expiration > datetime.utcnow():
-    #         return auth_record
-
-    #     else:
-    #         return False
-
 
 def fail_response():
     return Response("authentication required", 401)

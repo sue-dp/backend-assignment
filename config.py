@@ -18,3 +18,5 @@ products = [
     "Specialized equipment",
     "Personal items"
 ]
+
+categories = ["Hostage Rescue", "Dictator Oust", "Pirate Obliteration", "Doc Rescue"]

@@ -29,3 +29,13 @@ def product_delete_by_id(product_id):
 @products.route('/product/<product_id>', methods=['PUT'])
 def product_update(product_id):
     return controllers.product_update(request, product_id)
+
+
+@products.route('/product/<product_id>', methods=['PATCH'])
+def product_activity(product_id):
+    return controllers.product_activity(request, product_id)
+
+
+@products.route('/product/category-add', methods=['POST'])
+def product_add_category():
+    return controllers.product_add_category(request)

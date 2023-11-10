@@ -30,7 +30,7 @@ class ProductsSchema(ma.Schema):
         fields = ['product_id', 'product_name', 'users', 'categories', 'active']
 
     users = ma.fields.Nested("UsersSchema", many=True, exclude=["products"])
-    categories = ma.fields.Nested("CategoriesSchema", many=True, exclud=['products'])
+    categories = ma.fields.Nested("CategoriesSchema", many=True, exclude=['products'])
 
 
 product_schema = ProductsSchema()
