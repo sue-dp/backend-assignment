@@ -3,6 +3,7 @@ from flask import jsonify
 from db import db
 from models.users import Users, user_schema, users_schema
 from models.products import Products
+from models.auth_tokens import AuthTokens
 from util.reflection import populate_object
 from lib.authenticate import authenticate, authenticate_return_auth
 
@@ -50,22 +51,22 @@ def user_get_by_id(req, user_id, auth_info):
 
 @authenticate_return_auth
 def user_delete_by_id(req, user_id, auth_info):
+    if auth_info.user.user_id == user_id:
+        return jsonify({'message': 'user cannot delete themselves'}), 403
+
     user_query = db.session.query(Users).filter(Users.user_id == user_id).first()
 
     if auth_info.user.role == 'admin':
         if user_query:
-            try:
+            auth_tokens = db.session.query(AuthTokens).filter(AuthTokens.user_id == user_id).all()
+            for token in auth_tokens:
+                db.session.delete(token)
+            db.session.delete(user_query)
+            db.session.commit()
 
-                db.sesion.delete(user_query)
-                db.session.commit()
+            return jsonify({'message': 'record successfully deleted'}), 200
 
-            except:
-
-                db.session.rollback()
-
-            return jsonify({'message': 'unable to delete record'}), 400
-
-        return jsonify({'message': 'record successfully deleted'}), 200
+        return jsonify({'message': 'user not found'}), 404
 
     else:
         return jsonify({'message': 'unauthorized'}), 401

@@ -43,21 +43,16 @@ def product_delete_by_id(req, product_id, auth_info):
 
     if auth_info.user.role == 'admin':
         if product_query:
-            try:
 
-                db.sesion.delete(product_query)
-                db.session.commit()
+            db.session.delete(product_query)
+            db.session.commit()
 
-            except:
+            return jsonify({'message': 'record successfully deleted'}), 200
 
-                db.session.rollback()
-
-            return jsonify({'message': 'error: unable to delete record'}), 400
-
-        return jsonify({'message': 'product successfully deleted'}), 200
+        return jsonify({'message': 'product not found'}), 404
 
     else:
-        return jsonify({'message': 'forbidden'}), 403
+        return jsonify({'message': 'unauthorized'}), 401
 
 
 @authenticate_return_auth

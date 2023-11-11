@@ -47,21 +47,16 @@ def category_delete_by_id(req, category_id, auth_info):
 
     if auth_info.user.role == 'admin':
         if category_query:
-            try:
 
-                db.sesion.delete(category_query)
-                db.session.commit()
+            db.session.delete(category_query)
+            db.session.commit()
 
-            except:
+            return jsonify({'message': 'record successfully deleted'}), 200
 
-                db.session.rollback()
-
-            return jsonify({'message': 'error: unable to delete record'}), 400
-
-        return jsonify({'message': 'category successfully deleted'}), 200
+        return jsonify({'message': 'category not found'}), 404
 
     else:
-        return jsonify({'message': 'forbidden'}), 403
+        return jsonify({'message': 'unauthorized'}), 401
 
 
 @authenticate_return_auth
