@@ -93,10 +93,10 @@ def user_update(req, user_id, auth_info):
         return jsonify({'message': 'user not found'}), 404
 
 
-@authenticate
-def user_add_product(req):
+@authenticate_return_auth
+def user_add_product(req, auth_info):
     post_data = req.form if req.form else req.json
-    user_id = post_data.get('user_id')
+    user_id = auth_info.user.user_id
     product_id = post_data.get('product_id')
 
     user_query = db.session.query(Users).filter(Users.user_id == user_id).first()

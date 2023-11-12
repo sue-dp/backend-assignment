@@ -26,12 +26,12 @@ def auth_token_add(req):
     user_data = db.session.query(Users).filter(Users.email == values['email']).first()
 
     if not user_data:
-        return jsonify({"message": "Invalid Login"}), 401
+        return jsonify({'message': 'Invalid Login'}), 401
 
     valid_password = check_password_hash(user_data.password, values['password'])
 
     if not valid_password:
-        return jsonify({"message": "Invalid Login"}), 401
+        return jsonify({'message': 'Invalid Login'}), 401
 
     existing_tokens = db.session.query(AuthTokens).filter(AuthTokens.user_id == user_data.user_id).all()
 
@@ -47,4 +47,4 @@ def auth_token_add(req):
     db.session.add(new_token)
     db.session.commit()
 
-    return jsonify({'message': 'success', "auth_info": auth_token_schema.dump(new_token)}), 201
+    return jsonify({'message': 'success', 'auth_info': auth_token_schema.dump(new_token)}), 201

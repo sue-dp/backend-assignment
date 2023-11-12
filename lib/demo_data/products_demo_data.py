@@ -1,3 +1,5 @@
+import random
+
 import config
 from db import db
 from models.products import Products
@@ -10,9 +12,10 @@ def add_product_demo_data():
 
         if new_product == None:
             product_name = product
+            price = random.choice(config.prices)
             active = True
 
-            new_product = Products(product_name, active)
+            new_product = Products(product_name, price, active)
 
             db.session.add(new_product)
 
