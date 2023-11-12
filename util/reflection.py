@@ -10,4 +10,4 @@ def populate_object(obj, data_dictionary):
             setattr(obj, field, data_dictionary[field])
 
         except AttributeError:
-            return jsonify({"error": f"record has no attribute {field}"}), 400
+            return jsonify({'error': f'record has no attribute {field}'}), 400

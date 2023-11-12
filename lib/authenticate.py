@@ -26,7 +26,6 @@ def validate_token(args):
 
     try:
         auth_record = db.session.query(AuthTokens).filter(AuthTokens.auth_token == auth_token).filter(AuthTokens.expiration > datetime.utcnow()).first()
-        print(auth_record)
         return auth_record
 
     except:
@@ -34,7 +33,7 @@ def validate_token(args):
 
 
 def fail_response():
-    return Response("authentication required", 401)
+    return Response('authentication required', 401)
 
 
 def authenticate(func):
@@ -53,7 +52,7 @@ def authenticate_return_auth(func):
     @functools.wraps(func)
     def wrapper_auth_return(*args, **kwargs):
         auth_info = validate_token(args[0])
-        kwargs["auth_info"] = auth_info
+        kwargs['auth_info'] = auth_info
 
         if auth_info:
             return func(*args, **kwargs)

@@ -5,7 +5,7 @@ from models.users import Users, user_schema, users_schema
 from models.products import Products
 from models.auth_tokens import AuthTokens
 from util.reflection import populate_object
-from lib.authenticate import authenticate, authenticate_return_auth
+from lib.authenticate import authenticate_return_auth
 
 
 @authenticate_return_auth
@@ -27,7 +27,6 @@ def user_add(req, auth_info):
 @authenticate_return_auth
 def users_get_all(req, auth_info):
     users_query = db.session.query(Users).all()
-    print(auth_info.user.role)
 
     if auth_info.user.role == 'admin':
         return jsonify({'message': 'users found', 'users': users_schema.dump(users_query)}), 200

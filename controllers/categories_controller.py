@@ -1,7 +1,6 @@
 from flask import jsonify
 
 from db import db
-from models.products import Products, product_schema, products_schema
 from util.reflection import populate_object
 from models.categories import Categories, category_schema, categories_schema
 from lib.authenticate import authenticate, authenticate_return_auth

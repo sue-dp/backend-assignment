@@ -17,21 +17,21 @@ def create_all():
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://127.0.0.1:5432/apc"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://127.0.0.1:5432/apc'
 
 init_db(app, db)
 
 
 def create_tables():
     with app.app_context():
-        print("creating tables...")
+        print('creating tables...')
         db.create_all()
-        print("tables created successfully.")
+        print('tables created successfully.')
 
 
 register_blueprints(app)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     create_all()
     create_tables()
-    app.run(host="0.0.0.0", port="8086", debug=True)
+    app.run(host='0.0.0.0', port='8086', debug=True)

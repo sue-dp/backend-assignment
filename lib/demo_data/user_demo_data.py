@@ -16,15 +16,15 @@ def add_user_demo_data():
         if new_user == None:
             first_name = first_name
             last_name = last_name
-            email = f"{first_name.lower()}{last_name.lower()}@expendables.com"
+            email = f'{first_name.lower()}{last_name.lower()}@expendables.com'
             password = '1234'
 
             if first_name == 'Barney':
-                role = "admin"
+                role = 'admin'
             else:
-                role = "user"
+                role = 'user'
 
-            new_password = generate_password_hash(password).decode("utf8")
+            new_password = generate_password_hash(password).decode('utf8')
 
             new_user = Users(first_name=first_name, last_name=last_name, email=email, password=new_password, role=role)
 

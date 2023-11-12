@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 from db import db
 from models.auth_tokens import AuthTokens, auth_token_schema
 from models.users import Users
-from util.reflection import populate_object
 
 
 def auth_token_add(req):
